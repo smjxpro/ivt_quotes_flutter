@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:quotes_flutter/helpers/database_helper.dart';
 import 'package:quotes_flutter/models/quote.dart';
 
 class Home extends StatefulWidget {
@@ -22,7 +23,29 @@ class _HomeState extends State<Home> {
   }
 
   Quote quoteOfTheDay() {
-    return widget.quotes[rnd];
+    if (widget.quotes.length > 0) {
+      return widget.quotes[rnd];
+    }
+    return null;
+  }
+
+  Future<Quote> getQuoteFromDb(int id) async {
+    DatabaseHelper databaseHelper = DatabaseHelper.instance;
+
+    Quote quote = await databaseHelper.getQuote(id);
+
+    return quote;
+  }
+
+  @override
+  void initState() {
+    generateRandom();
+
+    quoteOfTheDay();
+
+    setState(() {});
+
+    super.initState();
   }
 
   @override
@@ -40,11 +63,36 @@ class _HomeState extends State<Home> {
               })
         ],
       ),
-      body: Column(
-        children: [
-          Text(quoteOfTheDay().text),
-          Text(quoteOfTheDay().author == null ? '' : quoteOfTheDay().author),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              quoteOfTheDay().text == null
+                  ? ''
+                  : '"' + quoteOfTheDay().text + '"',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  quoteOfTheDay().author == null
+                      ? ''
+                      : '- ' + quoteOfTheDay().author,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
