@@ -2,8 +2,8 @@
     package="xyz.smj.quotes_flutter">
 
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="quotes_flutter">
+        android:icon="@drawable/logo"
+        android:label="Quotes">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
