@@ -56,7 +56,7 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<Quote> getQuote(int id) async {
+  Future<Quote> getQuoteById(int id) async {
     Database db = await database;
 
     List<Map> maps = await db.query(tableQuotes,
@@ -90,6 +90,45 @@ class DatabaseHelper {
     }
     return quotes;
   }
+
+  Future<List<String>> getAuthors() async {
+    Database db = await database;
+
+    List<String> authors = List();
+
+    List<Map> maps = await db.query(
+      tableQuotes,
+      columns: [columnAuthor],
+      distinct: true,
+    );
+
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        // print(maps[i]['author']);
+        authors.add(maps[i]['author']);
+      }
+      return authors;
+    }
+    return authors;
+  }
+
+  // Future<List<Quote>> getQuotesByAuthor({String author}) async {
+  //   Database db = await database;
+  //   List<Quote> quotes = List();
+  //
+  //   List<Map> maps = await db.query(tableQuotes,
+  //       columns: [columnId, columnText, columnAuthor],
+  //       where: '$columnAuthor = ?',
+  //       whereArgs: [author]);
+  //
+  //   if (maps.length > 0) {
+  //     for (int i = 0; i < maps.length; i++) {
+  //       var quote = Quote.fromJson(maps[i]);
+  //       quotes.add(quote);
+  //     }
+  //   }
+  //   return quotes;
+  // }
 
   Future<void> deleteQuotes() async {
     Database db = await database;

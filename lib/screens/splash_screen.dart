@@ -14,16 +14,6 @@ class SplashScreen extends StatelessWidget {
     DatabaseHelper databaseHelper = DatabaseHelper.instance;
 
     int id = await databaseHelper.insertQuote(quote);
-
-    print('Save: inserted with id: $id');
-  }
-
-  _delete() async {
-    DatabaseHelper databaseHelper = DatabaseHelper.instance;
-
-    await databaseHelper.deleteQuotes();
-
-    print('Deleted');
   }
 
   Future<List<Quote>> getQuotesFromDb() async {
@@ -39,18 +29,20 @@ class SplashScreen extends StatelessWidget {
     return AnimatedSplashScreen.withScreenFunction(
       splash: Icons.format_quote_rounded,
       screenFunction: () async {
-        var quotes = await quoteService.getQuotes();
+        List<Quote> quotesFromDb;
 
-        List<Quote> quotesFromDb = await getQuotesFromDb();
+        quotesFromDb = await getQuotesFromDb();
 
-        if (quotes.length > 0 && quotesFromDb.length != quotes.length) {
-          _delete();
+        if (quotesFromDb == null || quotesFromDb.length <= 0) {
+          var quotes = await quoteService.getQuotes();
           for (int i = 0; i < quotes.length; i++) {
             _save(quotes[i]);
           }
         }
 
-        return Home(
+        quotesFromDb = await getQuotesFromDb();
+
+        return HomeScreen(
           quotes: quotesFromDb,
         );
       },

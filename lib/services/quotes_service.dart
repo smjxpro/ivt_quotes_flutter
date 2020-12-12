@@ -22,8 +22,6 @@ class QuoteService implements IQuoteService {
     if (response.statusCode == 200) {
       var quoteMap = jsonDecode(response.body);
 
-      print(quoteMap);
-
       if (quoteMap.length > 0) {
         for (int i = 0; i < quoteMap.length; i++) {
           var quote = Quote.fromJson(quoteMap[i]);
@@ -32,7 +30,6 @@ class QuoteService implements IQuoteService {
       }
     }
 
-    print(quotes);
     return quotes;
   }
 }
